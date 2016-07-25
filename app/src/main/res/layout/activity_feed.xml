@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.myfabpics.FeedActivity"
+    android:background="@color/appBackground"
+    android:id="@+id/feed_layout">
+
+    <com.szugyi.circlemenu.view.CircleLayout
+        android:id="@+id/circle_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="#80FFFFFF"
+        android:visibility="gone">
+
+        <include layout="@layout/menu_items" />
+    </com.szugyi.circlemenu.view.CircleLayout>
+
+</RelativeLayout>

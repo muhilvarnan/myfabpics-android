@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MyFabPics</string>
+    <string name="button_subscribe">Subscribe</string>
+    <string name="hint_email">Subscribe with email address</string>
+    <string name="calendar">Calendar</string>
+    <string name="cloud">Cloud</string>
+    <string name="facebook">Facebook</string>
+    <string name="key">Key</string>
+    <string name="mail">Mail</string>
+    <string name="profile">Profile</string>
+    <string name="tag">Tag</string>
+    <string name="invalid_email">Please enter a valid email address.</string>
+    <string name="title_activity_wall_activity">wall_activity</string>
+</resources>
