@@ -6,9 +6,9 @@ package com.myfabpics.DataClass;
 public class NavItem {
     int id;
     String name;
-    int imageIcon;
+    String imageIcon;
 
-    public NavItem(int id, String name, int imageIcon) {
+    public NavItem(int id, String name, String imageIcon) {
         this.id = id;
         this.name = name;
         this.imageIcon = imageIcon;
@@ -29,11 +29,11 @@ public class NavItem {
         this.name = name;
     }
 
-    public int getImageIcon() {
+    public String getImageIcon() {
         return this.imageIcon;
     }
 
-    public void setImageIcon(int imageIcon) {
+    public void setImageIcon(String imageIcon) {
         this.imageIcon = imageIcon;
     }
 

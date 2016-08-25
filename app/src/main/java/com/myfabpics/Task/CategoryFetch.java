@@ -5,9 +5,14 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.myfabpics.CommonHelper.CircleNav;
 import com.myfabpics.CommonHelper.MakeHTTPCall;
 import com.myfabpics.CommonHelper.RemoteCategory;
 import com.myfabpics.DataClass.Category;
+import com.myfabpics.DataClass.NavItem;
+import com.myfabpics.R;
+import com.myfabpics.WallActivity;
+import com.szugyi.circlemenu.view.CircleLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,11 +28,11 @@ public class CategoryFetch extends AsyncTask<String, Integer, String> {
 
     private ProgressDialog progDialog;
 
-    private Activity activity;
+    private WallActivity activity;
 
-    String URL = "http://192.168.0.103:8000/api/categories/";
+    String URL = "http://myfabpics.com/api/categories/";
 
-    public CategoryFetch(Activity activity) {
+    public CategoryFetch(WallActivity activity) {
         this.activity = activity;
     }
 
@@ -56,12 +61,10 @@ public class CategoryFetch extends AsyncTask<String, Integer, String> {
         Log.d("fetch", result);
         progDialog.dismiss();
         if (result.length() == 0) {
-            //this.activity.alert ("Unable to find image data. Try again later. ");
+           // this.activity.alert ("Unable to find image data. Try again later. ");
             return;
         }
-
         try {
-
             JSONArray categoryJsonData = new JSONArray(result);
             for(int i=0; i < categoryJsonData.length(); i++){
                 JSONObject jsonObject = categoryJsonData.getJSONObject(i);
@@ -70,13 +73,10 @@ public class CategoryFetch extends AsyncTask<String, Integer, String> {
                 String navIcon = jsonObject.optString("nav_icon").toString();
                 remoteCategoryList.add(new Category(id, title, navIcon));
             }
-
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        //this.activity.setImages(imageData);
-
+        this.activity.setImages(remoteCategoryList);
     }
 }

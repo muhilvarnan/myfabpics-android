@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.myfabpics.CommonHelper.CircleNav;
 import com.myfabpics.CommonHelper.RemoteCategory;
+import com.myfabpics.DataClass.Category;
 import com.myfabpics.DataClass.NavItem;
 import com.myfabpics.Task.CategoryFetch;
 import com.szugyi.circlemenu.view.CircleImageView;
@@ -50,14 +51,15 @@ public class WallActivity extends Activity {
         } catch (Exception e) {
             categoryFetch.cancel(true);
         }
+    }
+
+    public void setImages(List<Category> categoryList) {
         CircleLayout circleLayout = (CircleLayout) WallActivity.this.findViewById(R.id.circle_layout);
         List<NavItem> navItemList = new ArrayList<NavItem>();
-        navItemList.add(new NavItem(1, "home", R.drawable.ic_home));
-        navItemList.add(new NavItem(2, "flora", R.drawable.ic_flora));
-        navItemList.add(new NavItem(3, "fauna", R.drawable.ic_fauna));
-        navItemList.add(new NavItem(4, "fantansy", R.drawable.ic_fantasy));
+        for (Category category: categoryList) {
+            navItemList.add(new NavItem(category.getId(), category.getTitle(), category.getNavIcon()));
+        }
         CircleNav circleNav = new CircleNav(this, circleLayout);
         circleNav.addNavigationItem(navItemList);
     }
-
 }

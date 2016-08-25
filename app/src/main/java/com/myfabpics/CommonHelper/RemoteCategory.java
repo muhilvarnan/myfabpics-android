@@ -24,7 +24,6 @@ public class RemoteCategory {
         List<Category> remoteCategoryList = new ArrayList<Category>();
         try {
             String categoryData = httpCli.getData(this.URL);
-            Log.d("category", categoryData);
             JSONArray categoryJsonData = new JSONArray(categoryData);
             for(int i=0; i < categoryJsonData.length(); i++){
                 JSONObject jsonObject = categoryJsonData.getJSONObject(i);
