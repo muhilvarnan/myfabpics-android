@@ -7,11 +7,16 @@ public class Category {
     int id;
     String title;
     String navIcon;
+    String image;
 
-    public Category(int id, String title, String navIcon) {
+    public Category(int id, String title, String image, String navIcon) {
         this.id = id;
         this.title = title;
         this.navIcon = navIcon;
+        this.image = image;
+    }
+    public Category() {
+
     }
 
     public int getId() {
@@ -36,5 +41,13 @@ public class Category {
 
     public void setNavIcon(String navIcon) {
         this.navIcon = navIcon;
+    }
+
+    public String getImage() {
+        return this.title;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

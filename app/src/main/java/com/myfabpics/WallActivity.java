@@ -14,6 +14,7 @@ import com.myfabpics.CommonHelper.CircleNav;
 import com.myfabpics.CommonHelper.RemoteCategory;
 import com.myfabpics.DataClass.Category;
 import com.myfabpics.DataClass.NavItem;
+import com.myfabpics.DatabaseHandler.DatabaseHelper;
 import com.myfabpics.Task.CategoryFetch;
 import com.szugyi.circlemenu.view.CircleImageView;
 import com.szugyi.circlemenu.view.CircleLayout;
@@ -42,7 +43,6 @@ public class WallActivity extends Activity {
                 }
             }
         });
-
     }
 
     public void setNavigation() {
@@ -53,10 +53,12 @@ public class WallActivity extends Activity {
         }
     }
 
-    public void setImages(List<Category> categoryList) {
+    public void  setNavigationData() {
         CircleLayout circleLayout = (CircleLayout) WallActivity.this.findViewById(R.id.circle_layout);
         List<NavItem> navItemList = new ArrayList<NavItem>();
-        for (Category category: categoryList) {
+        DatabaseHelper dbDatabaseHelper = new DatabaseHelper(this);
+        ArrayList<Category> categoryArrayList = dbDatabaseHelper.getAllCategories();
+        for(Category category: categoryArrayList) {
             navItemList.add(new NavItem(category.getId(), category.getTitle(), category.getNavIcon()));
         }
         CircleNav circleNav = new CircleNav(this, circleLayout);

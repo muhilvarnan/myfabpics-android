@@ -5,6 +5,6 @@
     <solid android:color="@color/appBackground" />
 
     <size
-        android:width="64dp"
-        android:height="64dp" />
+        android:width="100dp"
+        android:height="100dp" />
 </shape>

@@ -3,19 +3,15 @@ package com.myfabpics;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myfabpics.CommonHelper.Validator;
 import com.myfabpics.DataClass.Subcribe;
-import com.myfabpics.DatabaseHandler.SubscribeHelper;
-
-import java.security.spec.ECField;
+import com.myfabpics.DatabaseHandler.DatabaseHelper;
 
 public class SubcribeActivity extends Activity {
 
@@ -49,22 +45,20 @@ public class SubcribeActivity extends Activity {
                 EditText subscribeEmail = (EditText)SubcribeActivity.this.findViewById(R.id.subscribeEmail);
                 Validator validator = new Validator();
                 if(validator.isValidEmail(subscribeEmail.getText().toString())) {
-                    SubscribeHelper db = new SubscribeHelper(SubcribeActivity.this);
+                    DatabaseHelper db = new DatabaseHelper(SubcribeActivity.this);
                     db.addSubscribe(new Subcribe(subscribeEmail.getText().toString()));
                     Intent intent = new Intent("com.myfabpics.WallActivity");
                     startActivity(intent);
                 } else {
                     Toast.makeText(SubcribeActivity.this, getResources().getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
     }
 
 
     public boolean checkAppSubscribed() {
-        SubscribeHelper db = new SubscribeHelper(this);
+        DatabaseHelper db = new DatabaseHelper(this);
         if (db.getSubscribeCount()==0){
             return false;
         }

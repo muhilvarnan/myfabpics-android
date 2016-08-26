@@ -30,7 +30,8 @@ public class RemoteCategory {
                 int id = Integer.parseInt(jsonObject.optString("id").toString());
                 String title = jsonObject.optString("title").toString();
                 String navIcon = jsonObject.optString("nav_icon").toString();
-                remoteCategoryList.add(new Category(id, title, navIcon));
+                String image = jsonObject.optString("image").toString();
+                remoteCategoryList.add(new Category(id, title, image, navIcon));
             }
         } catch (IOException e) {
             e.printStackTrace();
