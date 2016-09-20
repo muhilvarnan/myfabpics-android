@@ -5,15 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".WallActivity"
-    tools:showIn="@layout/activity_wall_activity" android:background="@color/appBackground">
-
-    <ListView
+    tools:context="com.myfabpics.CategoryList"
+    android:background="@color/appBackground">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/category_title"
+            android:padding="5dp"
+            android:textColor="#000000"
+            android:textSize="35dp"
+            android:textAlignment="center"
+            android:elevation="2dp" />
 
-    </ListView>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_image_list"
+            >
+        </ListView>
+    </LinearLayout>
+
+
 
     <com.szugyi.circlemenu.view.CircleLayout
         android:id="@+id/circle_layout"
@@ -31,7 +48,7 @@
             android:id="@+id/textView"
             android:textColor="#000000"
             />
-            <include layout="@layout/menu_items" />
+        <include layout="@layout/menu_items" />
     </com.szugyi.circlemenu.view.CircleLayout>
 
     <android.support.design.widget.FloatingActionButton

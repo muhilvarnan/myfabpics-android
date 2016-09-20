@@ -1,19 +1,17 @@
 package com.myfabpics.Task;
 
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.widget.TextView;
 
-import com.myfabpics.CommonHelper.CircleNav;
+import com.myfabpics.CategoryList;
 import com.myfabpics.CommonHelper.MakeHTTPCall;
 import com.myfabpics.DataClass.Category;
-import com.myfabpics.DataClass.NavItem;
+import com.myfabpics.DataClass.Photo;
 import com.myfabpics.DatabaseHandler.DatabaseHelper;
-import com.myfabpics.R;
 import com.myfabpics.WallActivity;
 import com.myfabpics.config.API;
-import com.szugyi.circlemenu.view.CircleLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,15 +23,15 @@ import java.util.List;
 /**
  * Created by root on 25/7/16.
  */
-public class CategoryFetch extends AsyncTask<String, Integer, String> {
+public class CategoryListFetch extends AsyncTask<String, Integer, String> {
 
     private ProgressDialog progDialog;
 
-    private Activity activity;
+    private CategoryList activity;
 
     String URL = "api/categories/";
 
-    public CategoryFetch(Activity activity) {
+    public CategoryListFetch(CategoryList activity) {
         this.activity = activity;
     }
 
@@ -47,9 +45,9 @@ public class CategoryFetch extends AsyncTask<String, Integer, String> {
     protected String doInBackground(String... strings) {
         try {
             MakeHTTPCall httpCli = new MakeHTTPCall();
-            API api = new API();
-            this.URL = api.getBaseEndPoint()+this.URL;
             if (httpCli.checkInternetConnection(this.activity)) {
+                API api = new API();
+                this.URL = api.getBaseEndPoint()+ this.URL + String.valueOf(this.activity.getCategoryId());
                 String categoryData = httpCli.getData(this.URL);
                 return categoryData;
             }
@@ -62,32 +60,30 @@ public class CategoryFetch extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String result)
     {
-        List<Category> remoteCategoryList = new ArrayList<Category>();
+        ArrayList<Photo> remoteCategoryImageList = new ArrayList<Photo>();
         DatabaseHelper dbDatabaseHelper = new DatabaseHelper(this.activity);
         if (result.length() != 0) {
             try {
-                JSONArray categoryJsonData = new JSONArray(result);
-                for(int i=0; i < categoryJsonData.length(); i++){
-                    JSONObject jsonObject = categoryJsonData.getJSONObject(i);
+                JSONObject categoryImageListJsonData = new JSONObject(result);
+                JSONArray categoryImageList = categoryImageListJsonData.getJSONArray("items");
+                int currentPage = Integer.parseInt(categoryImageListJsonData.optString("current_page").toString());
+                int totalPage = Integer.parseInt(categoryImageListJsonData.optString("total_page").toString());
+                for(int i=0; i < categoryImageList.length(); i++){
+                    JSONObject jsonObject = categoryImageList.getJSONObject(i);
                     int id = Integer.parseInt(jsonObject.optString("id").toString());
                     String title = jsonObject.optString("title").toString();
-                    String navIcon = jsonObject.optString("nav_icon").toString();
                     String image = jsonObject.optString("image").toString();
-                    remoteCategoryList.add(new Category(id, title, image, navIcon));
+                    int categoryId = 2;
+                    remoteCategoryImageList.add(new Photo(id, categoryId, title, image));
                 }
-                dbDatabaseHelper.reframeCategories(remoteCategoryList);
+                dbDatabaseHelper.addOrUpdatePhoto(remoteCategoryImageList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        CircleLayout circleLayout = (CircleLayout) this.activity.findViewById(R.id.circle_layout);
-        List<NavItem> navItemList = new ArrayList<NavItem>();
-        ArrayList<Category> categoryArrayList = dbDatabaseHelper.getAllCategories();
-        for(Category category: categoryArrayList) {
-            navItemList.add(new NavItem(category.getId(), category.getTitle(), category.getNavIcon()));
-        }
-        CircleNav circleNav = new CircleNav(activity, circleLayout);
-        circleNav.addNavigationItem(navItemList);
+        this.activity.setQuoteList(remoteCategoryImageList);
         progDialog.dismiss();
     }
+
+
 }

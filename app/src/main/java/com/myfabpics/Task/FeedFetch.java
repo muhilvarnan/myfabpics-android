@@ -1,19 +1,13 @@
 package com.myfabpics.Task;
 
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
-import com.myfabpics.CommonHelper.CircleNav;
 import com.myfabpics.CommonHelper.MakeHTTPCall;
 import com.myfabpics.DataClass.Category;
-import com.myfabpics.DataClass.NavItem;
 import com.myfabpics.DatabaseHandler.DatabaseHelper;
-import com.myfabpics.R;
 import com.myfabpics.WallActivity;
 import com.myfabpics.config.API;
-import com.szugyi.circlemenu.view.CircleLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,17 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by root on 25/7/16.
+ * Created by root on 4/9/16.
  */
-public class CategoryFetch extends AsyncTask<String, Integer, String> {
+public class FeedFetch extends AsyncTask<String, Integer, String> {
 
     private ProgressDialog progDialog;
 
-    private Activity activity;
+    private WallActivity activity;
 
     String URL = "api/categories/";
 
-    public CategoryFetch(Activity activity) {
+    public FeedFetch(WallActivity activity) {
         this.activity = activity;
     }
 
@@ -50,8 +44,8 @@ public class CategoryFetch extends AsyncTask<String, Integer, String> {
             API api = new API();
             this.URL = api.getBaseEndPoint()+this.URL;
             if (httpCli.checkInternetConnection(this.activity)) {
-                String categoryData = httpCli.getData(this.URL);
-                return categoryData;
+                String feedData = httpCli.getData(this.URL);
+                return feedData;
             }
             return "";
         } catch (Exception e) {
@@ -62,8 +56,9 @@ public class CategoryFetch extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String result)
     {
-        List<Category> remoteCategoryList = new ArrayList<Category>();
+        List<Category> remoteFeedList = new ArrayList<Category>();
         DatabaseHelper dbDatabaseHelper = new DatabaseHelper(this.activity);
+        progDialog.dismiss();
         if (result.length() != 0) {
             try {
                 JSONArray categoryJsonData = new JSONArray(result);
@@ -73,21 +68,13 @@ public class CategoryFetch extends AsyncTask<String, Integer, String> {
                     String title = jsonObject.optString("title").toString();
                     String navIcon = jsonObject.optString("nav_icon").toString();
                     String image = jsonObject.optString("image").toString();
-                    remoteCategoryList.add(new Category(id, title, image, navIcon));
+                    remoteFeedList.add(new Category(id, title, image, navIcon));
                 }
-                dbDatabaseHelper.reframeCategories(remoteCategoryList);
+                dbDatabaseHelper.reframeCategories(remoteFeedList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        CircleLayout circleLayout = (CircleLayout) this.activity.findViewById(R.id.circle_layout);
-        List<NavItem> navItemList = new ArrayList<NavItem>();
-        ArrayList<Category> categoryArrayList = dbDatabaseHelper.getAllCategories();
-        for(Category category: categoryArrayList) {
-            navItemList.add(new NavItem(category.getId(), category.getTitle(), category.getNavIcon()));
-        }
-        CircleNav circleNav = new CircleNav(activity, circleLayout);
-        circleNav.addNavigationItem(navItemList);
-        progDialog.dismiss();
+        //this.activity.setNavigationData();
     }
 }

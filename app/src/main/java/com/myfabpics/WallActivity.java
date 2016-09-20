@@ -1,28 +1,24 @@
 package com.myfabpics;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.myfabpics.CommonHelper.CircleNav;
-import com.myfabpics.CommonHelper.RemoteCategory;
 import com.myfabpics.DataClass.Category;
 import com.myfabpics.DataClass.NavItem;
 import com.myfabpics.DatabaseHandler.DatabaseHelper;
 import com.myfabpics.Task.CategoryFetch;
 import com.szugyi.circlemenu.view.CircleImageView;
 import com.szugyi.circlemenu.view.CircleLayout;
-
+import com.szugyi.circlemenu.view.CircleLayout.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WallActivity extends Activity {
+public class WallActivity extends Activity implements OnItemClickListener {
 
     CategoryFetch categoryFetch = new CategoryFetch(WallActivity.this);
     @Override
@@ -45,23 +41,22 @@ public class WallActivity extends Activity {
         });
     }
 
+    @Override
+    public void onItemClick(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("categoryId", view.getId());
+        Intent intent = new Intent(WallActivity.this,CategoryList.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
     public void setNavigation() {
         try {
+            CircleLayout circleLayout = (CircleLayout) WallActivity.this.findViewById(R.id.circle_layout);
+            circleLayout.setOnItemClickListener(this);
             categoryFetch.execute();
         } catch (Exception e) {
             categoryFetch.cancel(true);
         }
-    }
-
-    public void  setNavigationData() {
-        CircleLayout circleLayout = (CircleLayout) WallActivity.this.findViewById(R.id.circle_layout);
-        List<NavItem> navItemList = new ArrayList<NavItem>();
-        DatabaseHelper dbDatabaseHelper = new DatabaseHelper(this);
-        ArrayList<Category> categoryArrayList = dbDatabaseHelper.getAllCategories();
-        for(Category category: categoryArrayList) {
-            navItemList.add(new NavItem(category.getId(), category.getTitle(), category.getNavIcon()));
-        }
-        CircleNav circleNav = new CircleNav(this, circleLayout);
-        circleNav.addNavigationItem(navItemList);
     }
 }

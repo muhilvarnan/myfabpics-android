@@ -38,7 +38,7 @@ public class ImageLoader {
         executorService = Executors.newFixedThreadPool(5);
     }
 
-    final int loader_image = R.mipmap.ic_launcher;
+    final int loader_image = R.drawable.loader;
 
     public void displayImage(String url, ImageView imageView) {
         imageviews.put(imageView, url);
@@ -88,9 +88,11 @@ public class ImageLoader {
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-            final int REQUIRED_SIZE = 70;
-            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            final int REQUIRED_SIZE = 1000;
+            int width_tmp = o.outWidth, height_tmp   = o.outHeight;
             int scale = 1;
+            Log.d("imageloader - width", String.valueOf(width_tmp));
+            Log.d("imageloader - height", String.valueOf(height_tmp));
             while(true) {
                 if(width_tmp/2 < REQUIRED_SIZE || height_tmp/2 < REQUIRED_SIZE) {
                     break;
@@ -101,7 +103,9 @@ public class ImageLoader {
             }
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+            Log.d("imageloader", String.valueOf(scale));
+            Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+            return bitmap;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -129,7 +133,7 @@ public class ImageLoader {
             }
 
             Bitmap bmp = getBitmap(photoToLoad.url);
-
+            bmp = Bitmap.createScaledBitmap(bmp, 400, 267, true);
             memoryCache.put(photoToLoad.url, bmp);
 
             if(imageViewReused(photoToLoad)) {

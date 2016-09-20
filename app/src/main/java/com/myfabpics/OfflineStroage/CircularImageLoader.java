@@ -39,7 +39,7 @@ public class CircularImageLoader {
         executorService = Executors.newFixedThreadPool(5);
     }
 
-    final int loader_image = R.mipmap.ic_launcher;
+    final int loader_image = R.drawable.holder_fabpics;
 
     public void displayImage(String url, CircleImageView circleImageView) {
         Log.d("data", "called");

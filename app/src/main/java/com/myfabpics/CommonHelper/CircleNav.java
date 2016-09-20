@@ -32,13 +32,14 @@ public class CircleNav {
         for (NavItem navitem: navItemList) {
             CircleImageView circleImageView = new   CircleImageView(this.activity);
             circleImageView.setName(navitem.getName());
+            circleImageView.setId(navitem.getId());
             circleImageView.setBackground(this.activity.getResources().getDrawable(R.drawable.circle));
             circleImageView.setImageResource(R.drawable.ic_cloud);
             circleImageView.setLayoutParams(new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             this.circleLayout.addView(circleImageView);
-            Log.d("category", circleImageView.getName());
             this.circularImageLoader.displayImage(navitem.getImageIcon(), circleImageView);
+
         }
     }
 }
